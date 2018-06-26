@@ -1,0 +1,74 @@
+Polski alfabet sk�ada si� z 32 liter:
+
+a�bc�de�fghijkl�mn�o�prs�tuwyz��
+
+Analogicznie do zasady dzia�ania kodowania ROT13 (funkcja str_rot13()), prosz� stworzy� funkcj� koduj�c� ci�g znak�w zawieraj�cy znaki z polskiego alfabetu, z rotacj� 16 znak�w (ROT16). 
+
+Dzia�anie funkcji prosz� pokaza� na specjalnie w tym celu stworzonej stronie www z formularzem, w kt�rym b�dzie mo�na wstawi� tekst do zakodowania/odkodowania. 
+
+Przyk�ad zasady dzia�ania ROT13 mo�na znale�� na stronie http://www.rot13.com. Operujemy wy��cznie w kodowaniu UTF-8.
+
+Nale�y wykonac w PHP.
+
+Bonus:
+Wykona� w JS.
+
+
+<?php
+
+function rot($string){
+    $alfabetSmall = 'a b c d e f g h i j k l m n o p q r s t u v w x y z';
+    $alfabetBig = 'A B C D E F G H I J K L M N O P Q R S T U W V X Y Z';
+
+    $alfabetSmallx2= 'a b c d e f g h i j k l m n o p q r s t u v w x y z a b c d e f g h i j k l m n o p q r s t u v w x y z';
+    $alfabetBigx2= 'A B C D E F G H I J K L M N O P Q R S T U W V X Y Z A B C D E F G H I J K L M N O P Q R S T U W V X Y Z';
+
+    $explodedAlfabetSmall= explode(' ', $alfabetSmall);
+    $explodedAlfabetBig= explode(' ', $alfabetBig);
+    $explodedAlfabetSmallx2 = explode(' ', $alfabetSmallx2);
+    $explodedBigAlfabetx2 = explode(' ', $alfabetBigx2);
+
+    $textTab = str_split($string);
+    $countString = count($textTab);
+    $countAlfabet = count($explodedAlfabetSmall);
+    echo $string.'<br>';
+    for($i = 0; $i < $countString; $i++){
+        for($j = 0; $j < $countAlfabet; $j++){
+            if($textTab[$i] == $explodedAlfabetSmall[$j]){
+                $textTab[$i] = $explodedAlfabetSmallx2[$j+16];
+                break;
+            }
+            elseif($textTab[$i] == $explodedAlfabetBig[$j]){
+                $textTab[$i] = $explodedBigAlfabetx2[$j+16];
+                break;
+            }
+        }
+    }
+    $implodedString = implode('', $textTab);
+    var_dump($implodedString);
+}
+?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Zadanie 3</title>
+</head>
+<body>
+<form action = "index.php" method="post">
+    <textarea name="alfabet"></textarea>
+    <button type="submit" class="btn btn-danger">Dodaj</button>
+
+</form>
+</body>
+</html>
+
+<?php
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $string = $_POST['alfabet'];
+    rot($string);
+}
+?>
